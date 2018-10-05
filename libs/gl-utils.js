@@ -48,14 +48,14 @@ class GlUtils {
     }
 
     // Set the attributes, varying, and uniform to shader
-    shader.attributes = this.attributesFromSource(source)
-    shader.varyings = this.varyingsFromSource(source)
-    shader.uniforms = this.uniformsFromSource(source)
+    shader.attributes = this.variableFromSource(source, GlUtils.ATTRIBUTE)
+    shader.varyings = this.variableFromSource(source, GlUtils.VARYING)
+    shader.uniforms = this.variableFromSource(source, GlUtils.UNIFORM)
     return shader
   }
 
-  static xFromSource (source, x) {
-    const regex = new RegExp(`^${x} .*? (\\w+);`, 'g')
+  static variableFromSource (source, type) {
+    const regex = new RegExp(`^${type} .*? (\\w+);`, 'g')
     let matches = []
     let search
     while ((search = regex.exec(source)) !== null) {
@@ -63,18 +63,6 @@ class GlUtils {
       matches.push(search[1])
     }
     return matches
-  }
-
-  static attributesFromSource (source) {
-    return this.xFromSource(source, 'attribute')
-  }
-
-  static varyingsFromSource (source) {
-    return this.xFromSource(source, 'varying')
-  }
-
-  static uniformsFromSource (source) {
-    return this.xFromSource(source, 'uniform')
   }
 
   static loadShaders (callback) {
@@ -96,6 +84,11 @@ class GlUtils {
       })
   }
 }
+
+// Constants
+GlUtils.UNIFORM = 'uniform'
+GlUtils.VARYING = 'varying'
+GlUtils.ATTRIBUTE = 'attribute'
 
 // Expose GlUtils globally
 window.GlUtils = GlUtils
